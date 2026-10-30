@@ -61,7 +61,7 @@ app.get('/', (request, response) => {
 });
 
 // Task 4 & 5: GET /books/ - Get all books
-app.get('/books/', async (request, response) => {
+app.get(['/books', '/books/'], async (request, response) => {
   if (db) {
     const getBooksQuery = `
       SELECT
@@ -78,7 +78,7 @@ app.get('/books/', async (request, response) => {
 });
 
 // Task 4 & 5: GET /books/:bookId/ - Get single book by ID
-app.get('/books/:bookId/', async (request, response) => {
+app.get(['/books/:bookId', '/books/:bookId/'], async (request, response) => {
   const { bookId } = request.params;
   if (db) {
     const getBookQuery = `
@@ -104,7 +104,7 @@ app.get('/books/:bookId/', async (request, response) => {
 });
 
 // Task 4 & 5: POST /books/ - Add a new book
-app.post('/books/', async (request, response) => {
+app.post(['/books', '/books/'], async (request, response) => {
   const bookDetails = request.body;
   const { title, author, price, pages } = bookDetails;
 
@@ -127,7 +127,7 @@ app.post('/books/', async (request, response) => {
 });
 
 // Task 4 & 5: PUT /books/:bookId/ - Update an existing book
-app.put('/books/:bookId/', async (request, response) => {
+app.put(['/books/:bookId', '/books/:bookId/'], async (request, response) => {
   const { bookId } = request.params;
   const bookDetails = request.body;
   const { title, author, price, pages } = bookDetails;
@@ -163,7 +163,7 @@ app.put('/books/:bookId/', async (request, response) => {
 });
 
 // Task 4 & 5: DELETE /books/:bookId/ - Remove a book
-app.delete('/books/:bookId/', async (request, response) => {
+app.delete(['/books/:bookId', '/books/:bookId/'], async (request, response) => {
   const { bookId } = request.params;
 
   if (db) {
