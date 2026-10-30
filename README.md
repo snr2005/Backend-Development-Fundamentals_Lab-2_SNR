@@ -14,7 +14,6 @@
 4. [Endpoints and HTTP Methods](#endpoints-and-http-methods)
 5. [Screenshots of Working Endpoints](#screenshots-of-working-endpoints)
 6. [Notes: Problems Faced & Solutions](#notes-problems-faced--solutions)
-7. [Viva Questions & Answers](#viva-questions--answers)
 
 ---
 
@@ -139,19 +138,4 @@ node init-db.js
 3. **Handling Missing JSON Request Body:**
    - *Problem:* In POST and PUT requests, `request.body` would be `undefined` without the Express JSON body-parser middleware.
    - *Solution:* Added `app.use(express.json());` at the top of the middleware stack and implemented validation checking for mandatory fields (`title`, `author`, `price`, `pages`) with a `400 Bad Request` fallback.
-
----
-
-## --> Viva Questions & Answers
-
-### 1. Why await the database call?
-> **Answer:** Database operations (opening files, querying tables, writing transactions) are I/O-bound asynchronous operations that take unpredictable amounts of time. In JavaScript, asynchronous operations return a `Promise`. By using `await`, we pause the function execution until the database operation completes, ensuring that subsequent lines execute with the retrieved data rather than an unresolved `Promise`. Without `await`, sending `response.json(books)` would send an empty or pending promise object instead of the actual query results.
-
-### 2. What is SQL injection and how do placeholders prevent it?
-> **Answer:** SQL Injection is a security vulnerability where an attacker injects malicious SQL statements into user input fields (e.g., entering `' OR '1'='1` into an ID parameter) to manipulate the query execution, bypass authentication, or corrupt/delete data. Placeholders (`?`) prevent SQL injection because the database driver separates query compilation from data binding. The database first compiles and parses the query structure with `?`, and then binds the user input strictly as literal data values, guaranteeing that user input can never alter the query logic.
-
-### 3. When is PUT used instead of POST?
-> **Answer:** 
-> - **POST** is used to **create a new resource** on the server. It is typically **non-idempotent**, meaning sending the same POST request multiple times will create multiple distinct records with different primary keys.
-> - **PUT** is used to **update or replace an existing resource** at a specific URL (`/books/:bookId/`). It is **idempotent**, meaning executing the same PUT request multiple times with identical data results in the exact same database state without creating duplicate records.
 
