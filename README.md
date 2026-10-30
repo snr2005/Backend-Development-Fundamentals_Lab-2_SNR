@@ -3,7 +3,7 @@
 **Student Name:** R SATHYANARAYANA · **Registration Number:** 252U1R1209 · **Section:** CSE-2D(214)  
 **Course:** Backend Development Fundamentals (Year II Term II) · **Faculty:** SAI SIVA TEJA · **Institution:** Aurora Deemed to be University  
 **GitHub Repository:** [https://github.com/snr2005/Backend-Development-Fundamentals_Lab-2_SNR](https://github.com/snr2005/Backend-Development-Fundamentals_Lab-2_SNR)  
-**Live Deployment:** `Not applicable` *(SQLite operates on a local file-based storage model (`books.db`). Standard serverless platforms feature ephemeral read-only disks where write mutations (INSERT/UPDATE/DELETE) do not persist between invocations. For cloud deployment of SQLite, persistent-disk container hosts such as Render, Railway, or VPS instances are recommended).*
+**Live Link:** [https://backend-development-fundamentals-la-livid.vercel.app](https://backend-development-fundamentals-la-livid.vercel.app)
 
 ---
 
