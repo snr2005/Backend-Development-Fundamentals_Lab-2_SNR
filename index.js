@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const { open } = require('sqlite');
 const sqlite3 = require('sqlite3');
 
@@ -7,7 +8,22 @@ const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
-const dbPath = path.join(__dirname, 'books.db');
+
+// Setup database path (copies to /tmp on Vercel so write operations succeed)
+const sourceDb = path.join(__dirname, 'books.db');
+let dbPath = sourceDb;
+
+if (process.env.VERCEL) {
+  const tmpDb = path.join('/tmp', 'books.db');
+  try {
+    if (!fs.existsSync(tmpDb) && fs.existsSync(sourceDb)) {
+      fs.copyFileSync(sourceDb, tmpDb);
+    }
+    dbPath = tmpDb;
+  } catch (err) {
+    console.log('Error copying DB to /tmp:', err.message);
+  }
+}
 
 let db = null;
 
@@ -18,9 +34,11 @@ const initializeDBAndServer = async () => {
       filename: dbPath,
       driver: sqlite3.Database
     });
-    app.listen(PORT, () => {
-      console.log(`Server Running at http://localhost:${PORT}/`);
-    });
+    if (!process.env.VERCEL) {
+      app.listen(PORT, () => {
+        console.log(`Server Running at http://localhost:${PORT}/`);
+      });
+    }
   } catch (error) {
     console.log(`DB Error: ${error.message}`);
     process.exit(1);
@@ -28,6 +46,21 @@ const initializeDBAndServer = async () => {
 };
 
 initializeDBAndServer();
+
+// Ensure DB is connected for serverless invocations
+app.use(async (request, response, next) => {
+  if (!db) {
+    try {
+      db = await open({
+        filename: dbPath,
+        driver: sqlite3.Database
+      });
+    } catch (e) {
+      return response.status(500).send('Database connection error');
+    }
+  }
+  next();
+});
 
 // Root route
 app.get('/', (request, response) => {
